@@ -322,19 +322,22 @@ class _SearchBarState<T> extends State<SearchBar<T>>
       List<T> items, Widget Function(T item, int index) builder) {
     return Padding(
       padding: widget.listPadding,
-      child: StaggeredGridView.countBuilder(
-        crossAxisCount: widget.crossAxisCount,
-        itemCount: items.length,
-        shrinkWrap: widget.shrinkWrap,
-        staggeredTileBuilder:
-            widget.indexedScaledTileBuilder ?? (int index) => ScaledTile.fit(1),
-        scrollDirection: widget.scrollDirection,
-        mainAxisSpacing: widget.mainAxisSpacing,
-        crossAxisSpacing: widget.crossAxisSpacing,
-        addAutomaticKeepAlives: true,
-        itemBuilder: (BuildContext context, int index) {
-          return builder(items[index], index);
-        },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: items.length,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  return builder(items[index], index);
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
